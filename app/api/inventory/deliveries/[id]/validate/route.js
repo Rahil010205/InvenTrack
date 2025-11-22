@@ -39,9 +39,18 @@ export async function POST(request, { params }) {
                 [id, tenant_id]
             );
 
-            // 3. Update stock and ledger
+            // 3. Check stock availability and update
             for (const item of items) {
-                // Check stock availability first? (Optional but good practice, though not strictly requested in "Validate" logic, usually validation implies checking constraints. The prompt says "ONLY THEN perform the transaction to update the stock table". It doesn't explicitly say to check for negative stock, but it's implied for deliveries. However, the previous logic just did UPDATE quantity = quantity - ?. I'll stick to that for now to match previous logic, but maybe add a check if I want to be safe. The user said "Do not remove existing working logic, only enhance it." The existing logic didn't seem to check explicitly in the route I saw, it just ran the update. Wait, the existing logic was: UPDATE stock SET quantity = quantity - ? ...
+                const [stockRows] = await connection.query(
+                    'SELECT quantity FROM stock WHERE product_id = ? AND warehouse_id = ? AND tenant_id = ?',
+                    [item.product_id, item.warehouse_id, tenant_id]
+                );
+                const currentStock = stockRows.length > 0 ? stockRows[0].quantity : 0;
+
+                if (currentStock < item.quantity) {
+                    await connection.rollback();
+                    return NextResponse.json({ error: `Insufficient stock for product ID ${item.product_id} at warehouse ${item.warehouse_id}` }, { status: 400 });
+                }
 
                 await connection.query(
                     `UPDATE stock SET quantity = quantity - ? 

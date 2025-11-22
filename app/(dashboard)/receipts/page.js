@@ -1,7 +1,7 @@
 import { fetchAPI } from '@/lib/api';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
-import Table from '@/components/ui/Table';
+import ViewSwitcher from '@/components/ViewSwitcher';
 import ValidateButton from '@/components/ValidateButton';
 import SearchFilterBar from '@/components/SearchFilterBar';
 
@@ -30,7 +30,7 @@ export default async function ReceiptsPage({ searchParams }) {
       </div>
 
       <SearchFilterBar placeholder="Search supplier..." statusOptions={['draft', 'done', 'cancelled']} />
-
+      <ViewSwitcher items={receipts} type="receipt" />
       <Table
         headers={['ID', 'Supplier', 'Status', 'Created By', 'Date', 'Actions']}
         data={receipts}

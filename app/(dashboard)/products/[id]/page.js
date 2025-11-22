@@ -157,6 +157,19 @@ export default function EditProductPage() {
                     />
                 </div>
 
+                <div>
+                    <label htmlFor="cost_price" className="block text-sm font-medium text-foreground">Cost Price</label>
+                    <input
+                        type="number"
+                        name="cost_price"
+                        id="cost_price"
+                        defaultValue={product.cost_price || 0}
+                        min="0"
+                        step="0.01"
+                        className="mt-1 block w-full rounded-md border border-input bg-background text-foreground px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+                    />
+                </div>
+
                 <div className="flex justify-end">
                     <button
                         type="submit"

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import { verifyJWT } from '@/lib/auth';
 import { cookies } from 'next/headers';
+import { generateSequence } from '@/lib/utils';
 
 export async function GET(request) {
   try {
@@ -57,12 +58,17 @@ export async function POST(request) {
     const connection = await pool.getConnection();
     try {
       await connection.beginTransaction();
-
       const [result] = await connection.query(
         'INSERT INTO deliveries (tenant_id, customer_name, created_by, status) VALUES (?, ?, ?, ?)',
         [tenant_id, customer_name, user_id, 'draft']
       );
       const deliveryId = result.insertId;
+      const sequenceNumber = generateSequence('delivery', deliveryId);
+
+      await connection.query(
+        'UPDATE deliveries SET sequence_number = ? WHERE delivery_id = ?',
+        [sequenceNumber, deliveryId]
+      );
 
       for (const item of items) {
         await connection.query(
