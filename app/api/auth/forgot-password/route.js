@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
+import { sendEmail } from '@/lib/email';
 
 export async function POST(request) {
     try {
@@ -16,14 +17,24 @@ export async function POST(request) {
         const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
 
         // Save OTP to password_resets table
-        // Assuming table schema: email VARCHAR, otp_code VARCHAR, expires_at DATETIME
         await pool.query(
             'INSERT INTO password_resets (email, otp_code, expires_at) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE otp_code = ?, expires_at = ?',
             [email, otp_code, expiresAt, otp_code, expiresAt]
         );
 
-        // Mock sending email
-        console.log(`[MOCK EMAIL] To: ${email}, OTP: ${otp_code}`);
+        // Send email
+        try {
+            await sendEmail({
+                to: email,
+                subject: 'StockMaster Password Reset OTP',
+                text: `Your OTP for password reset is: ${otp_code}. It expires in 15 minutes.`,
+                html: `<p>Your OTP for password reset is: <strong>${otp_code}</strong></p><p>It expires in 15 minutes.</p>`,
+            });
+        } catch (emailError) {
+            console.error('Failed to send OTP email:', emailError);
+            // Optionally return an error or just log it. 
+            // For security, we might still want to return success to the user.
+        }
 
         return NextResponse.json({ message: 'If an account exists, an OTP has been sent.' });
     } catch (error) {
@@ -31,3 +42,4 @@ export async function POST(request) {
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 }
+
