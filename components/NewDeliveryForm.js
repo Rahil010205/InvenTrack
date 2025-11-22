@@ -120,7 +120,10 @@ export default function NewDeliveryForm({ products, warehouses }) {
         <button
           type="submit"
           disabled={loading}
-          className="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 transition-colors"
+          className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 
+           dark:bg-blue-500 dark:hover:bg-blue-600
+           focus:outline-none focus:ring-2 focus:ring-blue-500
+           disabled:opacity-50 transition-colors"
         >
           {loading ? 'Creating...' : 'Create Delivery'}
         </button>

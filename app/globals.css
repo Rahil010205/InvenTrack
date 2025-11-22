@@ -2,12 +2,12 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0f172a;   /* <-- use Tailwind's slate-900 or #000 */
   --card-bg: #ffffff;
   --card-border: #e2e8f0;
   --input-bg: #ffffff;
   --input-border: #cbd5e1;
-  --input-text: #171717;
+  --input-text: #0f172a;   /* <-- match foreground for input text */
   --sidebar-bg: #ffffff;
   --sidebar-border: #e2e8f0;
   --header-bg: #ffffff;

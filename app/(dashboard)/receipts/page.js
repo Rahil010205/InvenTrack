@@ -27,9 +27,16 @@ export default async function ReceiptsPage() {
             <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-foreground">#{receipt.receipt_id}</td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{receipt.supplier_name}</td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
-              <span className="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:text-green-400">
-                {receipt.status}
-              </span>
+              <span className="
+  inline-flex items-center rounded-full 
+  bg-blue-600 text-white
+  px-2.5 py-0.5 text-xs font-medium
+  dark:bg-green-400 dark:text-green-900
+  transition-colors
+">
+  {receipt.status}
+</span>
+
             </td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{receipt.created_by_name || 'Unknown'}</td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
