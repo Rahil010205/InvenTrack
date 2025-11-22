@@ -11,7 +11,7 @@ import {
   ArrowLeftRight,
   ClipboardList,
   BarChart3,
-  LogOut,
+  LogOut, 
   Warehouse,
   Folder
 } from 'lucide-react';
@@ -60,24 +60,22 @@ export default function Sidebar() {
             <Link
               key={item.name}
               href={item.href}
-              title={isCollapsed ? item.name : undefined}
               className={clsx(
                 'group flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors',
                 isActive
-                  ? 'bg-slate-100 dark:bg-slate-700 text-blue-600 dark:text-blue-400'
-                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-100',
-                'group flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors',
-                isCollapsed ? 'justify-center' : ''
+                  ? 'bg-accent text-accent-foreground'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
               )}
             >
               <item.icon
                 className={clsx(
-                  isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-500 dark:group-hover:text-slate-400',
-                  'h-5 w-5 shrink-0',
-                  isCollapsed ? '' : 'mr-3'
+                  'mr-3 h-5 w-5 shrink-0 transition-colors',
+                  isActive
+                    ? 'text-accent-foreground'
+                    : 'text-muted-foreground group-hover:text-foreground'
                 )}
               />
-              {!isCollapsed && <span className="truncate">{item.name}</span>}
+              {item.name}
             </Link>
           );
         })}
