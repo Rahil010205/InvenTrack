@@ -58,7 +58,7 @@ export default function SignupPage() {
           )}
         </button>
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-foreground">StockMaster</h1>
+          <h1 className="text-2xl font-bold text-foreground">InvenTrack</h1>
           <p className="text-muted-foreground">Create your account</p>
         </div>
 

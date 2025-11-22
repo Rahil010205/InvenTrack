@@ -11,13 +11,31 @@ export async function GET(request) {
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     const { tenant_id } = payload;
 
-    const [rows] = await pool.query(`
+    const { searchParams } = new URL(request.url);
+    const search = searchParams.get('search');
+    const status = searchParams.get('status');
+
+    let query = `
       SELECT d.*, u.name as created_by_name 
       FROM deliveries d 
       LEFT JOIN users u ON d.created_by = u.user_id 
       WHERE d.tenant_id = ?
-      ORDER BY d.created_at DESC
-    `, [tenant_id]);
+    `;
+    const params = [tenant_id];
+
+    if (search) {
+      query += ` AND d.customer_name LIKE ?`;
+      params.push(`%${search}%`);
+    }
+
+    if (status) {
+      query += ` AND d.status = ?`;
+      params.push(status);
+    }
+
+    query += ` ORDER BY d.created_at DESC`;
+
+    const [rows] = await pool.query(query, params);
     return NextResponse.json(rows);
   } catch (error) {
     console.error('Failed to fetch deliveries:', error);
@@ -42,7 +60,7 @@ export async function POST(request) {
 
       const [result] = await connection.query(
         'INSERT INTO deliveries (tenant_id, customer_name, created_by, status) VALUES (?, ?, ?, ?)',
-        [tenant_id, customer_name, user_id, 'done']
+        [tenant_id, customer_name, user_id, 'draft']
       );
       const deliveryId = result.insertId;
 
@@ -50,18 +68,6 @@ export async function POST(request) {
         await connection.query(
           'INSERT INTO delivery_items (tenant_id, delivery_id, product_id, warehouse_id, quantity) VALUES (?, ?, ?, ?, ?)',
           [tenant_id, deliveryId, item.product_id, item.warehouse_id, item.quantity]
-        );
-
-        await connection.query(
-          `UPDATE stock SET quantity = quantity - ? 
-           WHERE product_id = ? AND warehouse_id = ? AND tenant_id = ?`,
-          [item.quantity, item.product_id, item.warehouse_id, tenant_id]
-        );
-
-        await connection.query(
-          `INSERT INTO stock_ledger (tenant_id, product_id, warehouse_id, quantity_change, source_type, source_id) 
-           VALUES (?, ?, ?, ?, ?, ?)`,
-          [tenant_id, item.product_id, item.warehouse_id, -item.quantity, 'delivery', deliveryId]
         );
       }
 

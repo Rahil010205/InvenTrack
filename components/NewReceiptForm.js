@@ -125,7 +125,7 @@ export default function NewReceiptForm({ products, warehouses }) {
            focus:outline-none focus:ring-2 focus:ring-blue-500
            disabled:opacity-50 transition-colors"
         >
-          {loading ? 'Creating...' : 'Create Receipt'}
+          {loading ? 'Saving...' : 'Save as Draft'}
         </button>
       </div>
     </form>

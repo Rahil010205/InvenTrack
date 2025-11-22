@@ -125,7 +125,7 @@ export default function NewDeliveryForm({ products, warehouses }) {
            focus:outline-none focus:ring-2 focus:ring-blue-500
            disabled:opacity-50 transition-colors"
         >
-          {loading ? 'Creating...' : 'Create Delivery'}
+          {loading ? 'Saving...' : 'Save as Draft'}
         </button>
       </div>
     </form>

@@ -7,13 +7,31 @@ export async function GET(request) {
     const tenantId = await getTenantId(request);
     if (!tenantId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const [rows] = await pool.query(`
-      SELECT p.*, c.name as category_name 
+    const { searchParams } = new URL(request.url);
+    const search = searchParams.get('search');
+
+    let query = `
+      SELECT 
+        p.*, 
+        c.name as category_name, 
+        COALESCE(SUM(s.quantity), 0) as total_stock,
+        GROUP_CONCAT(CONCAT(w.name, ': ', s.quantity) SEPARATOR '\n') as stock_breakdown
       FROM products p 
       LEFT JOIN categories c ON p.category_id = c.category_id 
+      LEFT JOIN stock s ON p.product_id = s.product_id AND s.tenant_id = p.tenant_id
+      LEFT JOIN warehouses w ON s.warehouse_id = w.warehouse_id
       WHERE p.tenant_id = ?
-      ORDER BY p.created_at DESC
-    `, [tenantId]);
+    `;
+    const params = [tenantId];
+
+    if (search) {
+      query += ` AND (p.name LIKE ? OR p.sku LIKE ?)`;
+      params.push(`%${search}%`, `%${search}%`);
+    }
+
+    query += ` GROUP BY p.product_id ORDER BY p.created_at DESC`;
+
+    const [rows] = await pool.query(query, params);
     return NextResponse.json(rows);
   } catch (error) {
     console.error('Failed to fetch products:', error);

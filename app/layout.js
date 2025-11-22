@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "StockMaster",
-  description: "Inventory Management System",
+  title: "InvenTrack",
+  description: "Inventory Tracking System",
 };
 
 export default function RootLayout({ children }) {

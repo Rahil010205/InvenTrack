@@ -2,9 +2,19 @@ import { fetchAPI } from '@/lib/api';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import Table from '@/components/ui/Table';
+import ValidateButton from '@/components/ValidateButton';
+import SearchFilterBar from '@/components/SearchFilterBar';
 
-export default async function ReceiptsPage() {
-  const receipts = await fetchAPI('/inventory/receipts');
+export default async function ReceiptsPage({ searchParams }) {
+  const params = await searchParams;
+  const search = params?.search || '';
+  const status = params?.status || '';
+  const query = new URLSearchParams();
+  if (search) query.set('search', search);
+  if (status) query.set('status', status);
+  const queryString = query.toString() ? `?${query.toString()}` : '';
+
+  const receipts = await fetchAPI(`/inventory/receipts${queryString}`);
 
   return (
     <div className="space-y-6">
@@ -19,8 +29,10 @@ export default async function ReceiptsPage() {
         </Link>
       </div>
 
+      <SearchFilterBar placeholder="Search supplier..." statusOptions={['draft', 'done', 'cancelled']} />
+
       <Table
-        headers={['ID', 'Supplier', 'Status', 'Created By', 'Date']}
+        headers={['ID', 'Supplier', 'Status', 'Created By', 'Date', 'Actions']}
         data={receipts}
         renderRow={(receipt) => (
           <tr key={receipt.receipt_id} className="hover:bg-accent transition-colors">
@@ -41,6 +53,11 @@ export default async function ReceiptsPage() {
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{receipt.created_by_name || 'Unknown'}</td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
               {new Date(receipt.created_at).toLocaleDateString()}
+            </td>
+            <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
+              {receipt.status === 'draft' && (
+                <ValidateButton id={receipt.receipt_id} type="receipts" />
+              )}
             </td>
           </tr>
         )}

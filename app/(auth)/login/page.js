@@ -57,7 +57,7 @@ export default function LoginPage() {
           )}
         </button>
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-foreground">StockMaster</h1>
+          <h1 className="text-2xl font-bold text-foreground">InvenTrack</h1>
           <p className="text-muted-foreground">Sign in to your account</p>
         </div>
 
@@ -94,6 +94,11 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <div className="text-sm text-right mt-1">
+              <Link href="/login/forgot-password" className="font-medium text-primary hover:text-primary/80">
+                Forgot your password?
+              </Link>
+            </div>
           </div>
 
           <button
@@ -112,6 +117,6 @@ export default function LoginPage() {
           </Link>
         </p>
       </div>
-    </div>
+    </div >
   );
 }
