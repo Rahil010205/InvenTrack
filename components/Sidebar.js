@@ -34,7 +34,7 @@ export default function Sidebar() {
   return (
     <div className="flex h-full w-64 flex-col border-r border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 transition-colors">
       <div className="flex h-16 shrink-0 items-center px-6">
-        <span className="text-xl font-bold text-slate-900 dark:text-slate-100">StockMaster</span>
+        <span className="text-xl font-bold text-slate-900 dark:text-slate-100">InvenTrack</span>
       </div>
       <nav className="flex-1 space-y-1 px-4 py-4">
         {navigation.map((item) => {

@@ -12,14 +12,14 @@ export async function POST(request) {
             return NextResponse.json({ message: 'If an account exists, an OTP has been sent.' });
         }
 
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otp_code = Math.floor(100000 + Math.random() * 900000).toString();
         const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
 
         // Save OTP to password_resets table
-        // Assuming table schema: email VARCHAR, otp VARCHAR, expires_at DATETIME
+        // Assuming table schema: email VARCHAR, otp_code VARCHAR, expires_at DATETIME
         await pool.query(
             'INSERT INTO password_resets (email, otp_code, expires_at) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE otp_code = ?, expires_at = ?',
-            [email, otp_code, expiresAt]
+            [email, otp_code, expiresAt, otp_code, expiresAt]
         );
 
         // Mock sending email
