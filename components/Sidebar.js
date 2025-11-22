@@ -13,7 +13,8 @@ import {
   BarChart3,
   LogOut, 
   Warehouse,
-  Folder
+  Folder,
+  Menu
 } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -45,57 +46,70 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="flex h-full w-64 flex-col border-r border-border bg-card text-foreground transition-colors">
-      {/* Logo */}
-      <div className="flex h-16 items-center px-6">
-        <span className="text-xl font-bold">StockMaster</span>
+    <div className={clsx(
+      "flex h-full flex-col border-r border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 transition-all duration-300",
+      isCollapsed ? "w-16" : "w-64"
+    )}>
+      {/* Header / Toggle */}
+      <div className={clsx("flex h-16 shrink-0 items-center px-4", isCollapsed ? "justify-center" : "justify-between")}>
+        {!isCollapsed && (
+          <span className="text-xl font-bold text-slate-900 dark:text-slate-100 truncate">Options</span>
+        )}
+        <button
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="p-1.5 rounded-md text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-700 focus:outline-none transition-colors"
+          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          <Menu className="h-5 w-5" />
+        </button>
       </div>
-
+      
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 px-4 py-4">
+      <nav className="flex-1 space-y-1 px-2 py-4">
         {navigation.map((item) => {
           const isActive = pathname.startsWith(item.href);
-
           return (
             <Link
               key={item.name}
               href={item.href}
+              title={isCollapsed ? item.name : undefined}
               className={clsx(
                 'group flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors',
                 isActive
-                  ? 'bg-accent text-accent-foreground'
-                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                  ? 'bg-slate-100 dark:bg-slate-700 text-blue-600 dark:text-blue-400'
+                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-100',
+                isCollapsed ? 'justify-center' : ''
               )}
             >
               <item.icon
                 className={clsx(
-                  'mr-3 h-5 w-5 shrink-0 transition-colors',
-                  isActive
-                    ? 'text-accent-foreground'
-                    : 'text-muted-foreground group-hover:text-foreground'
+                  'h-5 w-5 shrink-0 transition-colors',
+                  isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-500 dark:group-hover:text-slate-400',
+                  isCollapsed ? '' : 'mr-3'
                 )}
+                aria-hidden="true"
               />
-              {item.name}
+              {!isCollapsed && <span className="truncate">{item.name}</span>}
             </Link>
           );
         })}
       </nav>
 
       {/* Logout */}
-      <div className="border-t border-border p-4">
+      <div className="border-t border-slate-200 dark:border-slate-700 p-2">
         <button
           onClick={handleLogout}
-          className="
-            group flex w-full items-center rounded-full px-4 py-2 text-sm font-medium
-            bg-red-100 text-red-700
-            dark:bg-red-800 dark:text-red-200
-            shadow
-            transition-colors
-            focus:outline-none focus:ring-2 focus:ring-red-400
-          "
+          title={isCollapsed ? "Sign out" : undefined}
+          className={clsx(
+            "group flex w-full items-center rounded-md px-2 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors",
+            isCollapsed ? "justify-center" : ""
+          )}
         >
-          <LogOut className="mr-3 h-5 w-5 shrink-0 text-inherit" />
-          Sign out
+          <LogOut className={clsx(
+            "h-5 w-5 shrink-0 text-red-500 dark:text-red-400 group-hover:text-red-600 dark:group-hover:text-red-300",
+            isCollapsed ? "" : "mr-3"
+          )} />
+          {!isCollapsed && <span className="truncate">Sign out</span>}
         </button>
       </div>
     </div>

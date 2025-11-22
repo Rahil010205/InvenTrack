@@ -21,16 +21,6 @@ export async function GET(request) {
     `;
     let lowStockParams = [tenantId];
 
-    // Note: Receipts and Deliveries are usually tied to a warehouse at the item level, but the main record might not have a single warehouse if items go to different ones. 
-    // However, for simplicity, we'll check if any item in the receipt/delivery belongs to the warehouse if filtering.
-    // Or if the receipt/delivery table has a warehouse_id (it doesn't seem to, based on previous schema checks, it has items).
-    // Let's check the schema or previous code. Receipt items have warehouse_id.
-    // So filtering receipts/deliveries by warehouse is tricky without joining.
-    // For now, I will only filter Stock and Low Stock alerts by warehouse, as that's the most relevant "Dashboard" metric for a warehouse manager.
-    // If the user strictly wants receipts/deliveries filtered, I'd need to join.
-    // "Pass ?warehouse_id= to /api/dashboard based on filter selection. Update /api/dashboard/route.js SQL queries to filter by warehouse_id."
-    // I'll try to filter all if possible.
-
     if (warehouse_id) {
       stockQuery += ' AND warehouse_id = ?';
       stockParams.push(warehouse_id);
@@ -42,8 +32,6 @@ export async function GET(request) {
     const [stockRows] = await pool.query(stockQuery, stockParams);
     const [lowStockRows] = await pool.query(lowStockQuery, lowStockParams);
 
-    // For receipts/deliveries, it's harder. I'll leave them as global for now or try a subquery.
-    // "SELECT COUNT(DISTINCT r.receipt_id) FROM receipts r JOIN receipt_items ri ON r.receipt_id = ri.receipt_id WHERE ..."
     let receiptQuery = "SELECT COUNT(DISTINCT r.receipt_id) as count FROM receipts r JOIN receipt_items ri ON r.receipt_id = ri.receipt_id WHERE (r.status = 'draft' OR r.status = 'waiting') AND r.tenant_id = ?";
     let receiptParams = [tenantId];
 
@@ -78,13 +66,35 @@ export async function GET(request) {
     activityQuery += ' ORDER BY l.created_at DESC LIMIT 5';
     const [recentActivity] = await pool.query(activityQuery, activityParams);
 
+    // Chart Data (Individual Events for last 100 transactions)
+    let chartQuery = `
+      SELECT 
+        ledger_id,
+        created_at,
+        CASE WHEN quantity_change > 0 THEN quantity_change ELSE 0 END as incoming,
+        CASE WHEN quantity_change < 0 THEN ABS(quantity_change) ELSE 0 END as outgoing
+      FROM stock_ledger
+      WHERE tenant_id = ?
+    `;
+    let chartParams = [tenantId];
+
+    if (warehouse_id) {
+      chartQuery += ' AND warehouse_id = ?';
+      chartParams.push(warehouse_id);
+    }
+
+    chartQuery += " ORDER BY created_at ASC LIMIT 100";
+    
+    const [chartRows] = await pool.query(chartQuery, chartParams);
+
     return NextResponse.json({
       totalItems: stockRows[0].total_items || 0,
       totalQty: stockRows[0].total_qty || 0,
       lowStock: lowStockRows[0].count || 0,
       pendingReceipts: receiptRows[0].count || 0,
       pendingDeliveries: deliveryRows[0].count || 0,
-      recentActivity
+      recentActivity,
+      chartData: chartRows
     });
   } catch (error) {
     console.error('Failed to fetch dashboard stats:', error);

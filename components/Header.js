@@ -3,8 +3,9 @@
 import { useTheme } from './ThemeProvider';
 import { Sun, Moon } from 'lucide-react';
 
-export default function Header({ title }) {
+export default function Header({ userName = 'User' }) {
   const { theme, toggleTheme, mounted } = useTheme();
+  const initial = userName.charAt(0).toUpperCase();
 
   if (!mounted) {
     return (
@@ -19,9 +20,9 @@ export default function Header({ title }) {
             <Moon className="h-5 w-5 text-muted-foreground" />
           </button>
           <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-            U
+            {initial}
           </div>
-          <span className="text-sm font-medium text-muted-foreground">User</span>
+          <span className="text-sm font-medium text-muted-foreground">{userName}</span>
         </div>
       </header>
     );
@@ -45,9 +46,9 @@ export default function Header({ title }) {
           )}
         </button>
         <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-          U
+          {initial}
         </div>
-        <span className="text-sm font-medium text-muted-foreground">User</span>
+        <span className="text-sm font-medium text-muted-foreground">{userName}</span>
       </div>
     </header>
   );

@@ -33,7 +33,7 @@ export default async function ProductsPage({ searchParams }) {
             <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-foreground">{product.name}</td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{product.sku}</td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{product.category_name || '-'}</td>
-            <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">${Number(product.cost_price || 0).toFixed(2)}</td>
+            <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">₹{Number(product.cost_price || 0).toFixed(2)}</td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <span>{product.on_hand}</span>

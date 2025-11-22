@@ -2,6 +2,7 @@ import { fetchAPI } from '@/lib/api';
 import { Card } from '@/components/ui/Card';
 import { Package, AlertTriangle, ArrowDownToLine, ArrowUpFromLine } from 'lucide-react';
 import DashboardFilter from '@/components/DashboardFilter';
+import StockMovementChart from '@/components/StockMovementChart';
 
 export default async function DashboardPage({ searchParams }) {
   const params = await searchParams;
@@ -46,6 +47,8 @@ export default async function DashboardPage({ searchParams }) {
           className="bg-blue-600 text-white"
         />
       </div>
+
+      <StockMovementChart data={stats.chartData} />
 
       <div className="rounded-xl border border-border bg-card p-6 shadow-sm transition-colors">
         <h3 className="text-lg font-medium text-foreground">Recent Activity</h3>
