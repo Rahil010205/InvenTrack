@@ -8,7 +8,7 @@ export async function POST(request) {
 
         // Verify OTP
         const [resets] = await pool.query(
-            'SELECT * FROM password_resets WHERE email = ? AND otp = ? AND expires_at > NOW()',
+            'SELECT * FROM password_resets WHERE email = ? AND otp_code = ? AND expires_at > NOW()',
             [email, otp]
         );
 
