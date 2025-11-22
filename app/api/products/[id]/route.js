@@ -31,11 +31,11 @@ export async function PUT(request, { params }) {
         if (!tenantId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const body = await request.json();
-        const { name, sku, category_id, unit, reorder_level } = body;
+        const { name, sku, category_id, unit, reorder_level, cost_price } = body;
 
         await pool.query(
-            'UPDATE products SET name = ?, sku = ?, category_id = ?, unit = ?, reorder_level = ? WHERE product_id = ? AND tenant_id = ?',
-            [name, sku, category_id || null, unit, reorder_level || 0, id, tenantId]
+            'UPDATE products SET name = ?, sku = ?, category_id = ?, unit = ?, reorder_level = ?, cost_price = ? WHERE product_id = ? AND tenant_id = ?',
+            [name, sku, category_id || null, unit, reorder_level || 0, cost_price || 0, id, tenantId]
         );
 
         return NextResponse.json({ message: 'Product updated successfully' });

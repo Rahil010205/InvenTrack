@@ -68,11 +68,19 @@ export default function NewProductForm({ categories }) {
         <input type="number" name="reorder_level" id="reorder_level" defaultValue="0" className="mt-1 block w-full rounded-md border border-input bg-background text-foreground px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors" />
       </div>
 
+      <div>
+        <label htmlFor="cost_price" className="block text-sm font-medium text-foreground">Cost Price</label>
+        <input type="number" name="cost_price" id="cost_price" defaultValue="0" min="0" step="0.01" className="mt-1 block w-full rounded-md border border-input bg-background text-foreground px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors" />
+      </div>
+
       <div className="flex justify-end">
         <button
           type="submit"
           disabled={loading}
-          className="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 transition-colors"
+          className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 
+           dark:bg-blue-500 dark:hover:bg-blue-600
+           focus:outline-none focus:ring-2 focus:ring-blue-500
+           disabled:opacity-50 transition-colors"
         >
           {loading ? 'Saving...' : 'Save Product'}
         </button>

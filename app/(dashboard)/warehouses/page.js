@@ -100,7 +100,7 @@ export default function WarehousesPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Warehouses</h1>
+        <h1 className="text-2xl font-bold text-foreground">Warehouses</h1>
         <p className="text-slate-500 dark:text-slate-400">Loading...</p>
       </div>
     );
@@ -109,7 +109,7 @@ export default function WarehousesPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Warehouses</h1>
+        <h1 className="text-2xl font-bold text-foreground">Warehouses</h1>
         <button
           onClick={() => {
             setShowForm(true);
@@ -124,75 +124,117 @@ export default function WarehousesPage() {
         </button>
       </div>
 
-      {showForm && (
-        <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm transition-colors">
-          <h2 className="text-lg font-medium text-slate-900 dark:text-slate-100 mb-4">
-            {editing ? 'Edit Warehouse' : 'Add New Warehouse'}
-          </h2>
-          {error && (
-            <div className="mb-4 rounded-md bg-red-50 dark:bg-red-900/20 p-4 text-sm text-red-700 dark:text-red-400">
-              {error}
-            </div>
-          )}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Warehouse Name *
-              </label>
-              <input
-                type="text"
-                id="name"
-                required
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="mt-1 block w-full rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
-              />
-            </div>
-            <div>
-              <label htmlFor="location" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Location
-              </label>
-              <input
-                type="text"
-                id="location"
-                value={formData.location}
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                className="mt-1 block w-full rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
-              />
-            </div>
-            <div className="flex justify-end gap-3">
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
-              >
-                {editing ? 'Update' : 'Create'} Warehouse
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
+  {showForm && (
+  <div
+    className="
+      rounded-xl
+      border border-border
+      bg-card
+      p-8 shadow-md
+      transition-colors
+    "
+  >
+    <h2 className="text-xl font-semibold text-foreground mb-6">
+      {editing ? 'Edit Warehouse' : 'Add New Warehouse'}
+    </h2>
+
+    {error && (
+      <div className="mb-4 rounded-md bg-destructive/10 p-4 text-sm text-destructive">
+        {error}
+      </div>
+    )}
+
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div>
+        <label className="block text-sm font-medium text-muted-foreground mb-1">
+          Warehouse Name *
+        </label>
+        <input
+          type="text"
+          required
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          className="
+            w-full px-4 py-2 rounded-md
+            bg-background
+            border border-border
+            text-foreground
+            shadow-sm
+            focus:outline-none focus:ring-2 focus:ring-primary
+            transition-colors
+          "
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-muted-foreground mb-1">
+          Location
+        </label>
+        <input
+          type="text"
+          value={formData.location}
+          onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+          className="
+            w-full px-4 py-2 rounded-md
+            bg-background
+            border border-border
+            text-foreground
+            shadow-sm
+            focus:outline-none focus:ring-2 focus:ring-primary
+            transition-colors
+          "
+        />
+      </div>
+
+      <div className="flex justify-end gap-3 pt-2">
+        <button
+  type="button"
+  onClick={handleCancel}
+  className="
+    rounded-md px-4 py-2 text-sm font-medium
+    bg-slate-700 text-white
+    hover:bg-slate-800
+    transition-colors
+    dark:bg-slate-600 dark:hover:bg-slate-700
+  "
+>
+  Cancel
+</button>
+
+        <button
+  type="submit"
+  className="
+    rounded-md px-4 py-2 text-sm font-medium
+    bg-blue-600 text-white
+    hover:bg-blue-700
+    transition-colors
+  "
+>
+  {editing ? 'Update' : 'Create'} Warehouse
+</button>
+
+      </div>
+    </form>
+  </div>
+)}
+
+
 
       <Table
         headers={['Name', 'Location', 'Created At', 'Actions']}
         data={warehouses}
         renderRow={(warehouse) => (
           <tr key={warehouse.warehouse_id} className="hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-            <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">
-              {warehouse.name}
-            </td>
-            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
-              {warehouse.location || '-'}
-            </td>
-            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
-              {new Date(warehouse.created_at).toLocaleDateString()}
-            </td>
+            <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-foreground">
+  {warehouse.name}
+</td>
+<td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-foreground">
+  {warehouse.location || '-'}
+</td>
+<td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-foreground">
+  {new Date(warehouse.created_at).toLocaleDateString()}
+</td>
+
+
             <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
               <div className="flex items-center gap-3">
                 <button

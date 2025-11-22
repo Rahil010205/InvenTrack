@@ -1,7 +1,7 @@
 import { fetchAPI } from '@/lib/api';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
-import Table from '@/components/ui/Table';
+import ViewSwitcher from '@/components/ViewSwitcher';
 import ValidateButton from '@/components/ValidateButton';
 import SearchFilterBar from '@/components/SearchFilterBar';
 
@@ -30,7 +30,7 @@ export default async function DeliveriesPage({ searchParams }) {
       </div>
 
       <SearchFilterBar placeholder="Search customer..." statusOptions={['draft', 'done', 'cancelled']} />
-
+      <ViewSwitcher items={deliveries} type="delivery" />
       <Table
         headers={['ID', 'Customer', 'Status', 'Created By', 'Date', 'Actions']}
         data={deliveries}
@@ -39,9 +39,16 @@ export default async function DeliveriesPage({ searchParams }) {
             <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-foreground">#{delivery.delivery_id}</td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{delivery.customer_name}</td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
-              <span className="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/30 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:text-blue-400">
-                {delivery.status}
-              </span>
+              <span className="
+  inline-flex items-center rounded-full 
+  bg-blue-600 text-white
+  px-2.5 py-0.5 text-xs font-medium
+  dark:bg-green-400 dark:text-green-900
+  transition-colors
+">
+  {delivery.status}
+</span>
+
             </td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{delivery.created_by_name || 'Unknown'}</td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">

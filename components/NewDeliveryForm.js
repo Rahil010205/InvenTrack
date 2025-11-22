@@ -65,62 +65,75 @@ export default function NewDeliveryForm({ products, warehouses }) {
           </button>
         </div>
 
-        {items.map((item, index) => (
-          <div key={index} className="flex gap-4 items-end border-b border-border pb-4">
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-foreground">Product</label>
-              <select
-                required
-                value={item.product_id}
-                onChange={(e) => updateItem(index, 'product_id', e.target.value)}
-                className="mt-1 block w-full rounded-md border border-input bg-background text-foreground px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
-              >
-                <option value="">Select Product</option>
-                {products.map((p) => (
-                  <option key={p.product_id} value={p.product_id}>{p.name} ({p.sku})</option>
-                ))}
-              </select>
-            </div>
+        {items.map((item, index) => {
+          const selectedProduct = products.find(p => p.product_id == item.product_id);
+          const isOutOfStock = selectedProduct && selectedProduct.free_to_use <= 0;
 
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-foreground">Warehouse</label>
-              <select
-                required
-                value={item.warehouse_id}
-                onChange={(e) => updateItem(index, 'warehouse_id', e.target.value)}
-                className="mt-1 block w-full rounded-md border border-input bg-background text-foreground px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
-              >
-                <option value="">Select Warehouse</option>
-                {warehouses.map((w) => (
-                  <option key={w.warehouse_id} value={w.warehouse_id}>{w.name}</option>
-                ))}
-              </select>
-            </div>
+          return (
+            <div key={index} className={`flex gap-4 items-end border-b border-border pb-4 ${isOutOfStock ? 'border-l-4 border-l-destructive pl-4 bg-destructive/5 rounded-l' : ''}`}>
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-foreground">
+                  Product
+                  {isOutOfStock && <span className="ml-2 text-xs text-destructive font-bold">OUT OF STOCK</span>}
+                </label>
+                <select
+                  required
+                  value={item.product_id}
+                  onChange={(e) => updateItem(index, 'product_id', e.target.value)}
+                  className={`mt-1 block w-full rounded-md border bg-background text-foreground px-3 py-2 shadow-sm focus:outline-none focus:ring-1 transition-colors ${isOutOfStock ? 'border-destructive focus:border-destructive focus:ring-destructive' : 'border-input focus:border-primary focus:ring-primary'}`}
+                >
+                  <option value="">Select Product</option>
+                  {products.map((p) => (
+                    <option key={p.product_id} value={p.product_id}>
+                      {p.name} ({p.sku}) - Free: {p.free_to_use}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            <div className="w-24">
-              <label className="block text-sm font-medium text-foreground">Qty</label>
-              <input
-                type="number"
-                required
-                min="1"
-                value={item.quantity}
-                onChange={(e) => updateItem(index, 'quantity', parseInt(e.target.value))}
-                className="mt-1 block w-full rounded-md border border-input bg-background text-foreground px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
-              />
-            </div>
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-foreground">Warehouse</label>
+                <select
+                  required
+                  value={item.warehouse_id}
+                  onChange={(e) => updateItem(index, 'warehouse_id', e.target.value)}
+                  className="mt-1 block w-full rounded-md border border-input bg-background text-foreground px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+                >
+                  <option value="">Select Warehouse</option>
+                  {warehouses.map((w) => (
+                    <option key={w.warehouse_id} value={w.warehouse_id}>{w.name}</option>
+                  ))}
+                </select>
+              </div>
 
-            <button type="button" onClick={() => removeItem(index)} className="mb-2 text-destructive hover:text-destructive/80 transition-colors">
-              <Trash2 className="h-5 w-5" />
-            </button>
-          </div>
-        ))}
+              <div className="w-24">
+                <label className="block text-sm font-medium text-foreground">Qty</label>
+                <input
+                  type="number"
+                  required
+                  min="1"
+                  value={item.quantity}
+                  onChange={(e) => updateItem(index, 'quantity', parseInt(e.target.value))}
+                  className="mt-1 block w-full rounded-md border border-input bg-background text-foreground px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+                />
+              </div>
+
+              <button type="button" onClick={() => removeItem(index)} className="mb-2 text-destructive hover:text-destructive/80 transition-colors">
+                <Trash2 className="h-5 w-5" />
+              </button>
+            </div>
+          );
+        })}
       </div>
 
       <div className="flex justify-end">
         <button
           type="submit"
           disabled={loading}
-          className="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 transition-colors"
+          className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 
+           dark:bg-blue-500 dark:hover:bg-blue-600
+           focus:outline-none focus:ring-2 focus:ring-blue-500
+           disabled:opacity-50 transition-colors"
         >
           {loading ? 'Saving...' : 'Save as Draft'}
         </button>

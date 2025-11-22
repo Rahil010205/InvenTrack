@@ -26,19 +26,17 @@ export default async function ProductsPage({ searchParams }) {
       <SearchFilterBar placeholder="Search products..." />
 
       <Table
-        headers={['Name', 'SKU', 'Category', 'Unit', 'Reorder Level', 'Stock', 'Created At', 'Actions']}
+        headers={['Name', 'SKU', 'Category', 'Cost', 'On Hand', 'Reserved', 'Free to Use', 'Actions']}
         data={products}
         renderRow={(product) => (
           <tr key={product.product_id} className="hover:bg-accent transition-colors">
             <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-foreground">{product.name}</td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{product.sku}</td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{product.category_name || '-'}</td>
-            <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{product.unit}</td>
-            <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{product.reorder_level}</td>
-            <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{product.reorder_level}</td>
+            <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">${Number(product.cost_price || 0).toFixed(2)}</td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
-                <span>{product.total_stock}</span>
+                <span>{product.on_hand}</span>
                 {product.stock_breakdown && (
                   <div className="group relative">
                     <Info className="h-4 w-4 text-muted-foreground cursor-help" />
@@ -49,9 +47,8 @@ export default async function ProductsPage({ searchParams }) {
                 )}
               </div>
             </td>
-            <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
-              {new Date(product.created_at).toLocaleDateString()}
-            </td>
+            <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{product.reserved}</td>
+            <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-foreground">{product.free_to_use}</td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
               <Link href={`/products/${product.product_id}`} className="text-primary hover:text-primary/80 transition-colors">
                 <Edit className="h-4 w-4" />

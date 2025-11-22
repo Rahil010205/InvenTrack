@@ -100,8 +100,8 @@ export default function CategoriesPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Categories</h1>
-        <p className="text-slate-500 dark:text-slate-400">Loading...</p>
+        <h1 className="text-2xl font-bold text-foreground">Categories</h1>
+        <p className="text-muted-foreground">Loading...</p>
       </div>
     );
   }
@@ -109,7 +109,7 @@ export default function CategoriesPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Categories</h1>
+        <h1 className="text-2xl font-bold text-foreground">Categories</h1>
         <button
           onClick={() => {
             setShowForm(true);
@@ -125,8 +125,8 @@ export default function CategoriesPage() {
       </div>
 
       {showForm && (
-        <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm transition-colors">
-          <h2 className="text-lg font-medium text-slate-900 dark:text-slate-100 mb-4">
+        <div className="rounded-xl border border-border bg-card text-card-foreground p-6 shadow-sm transition-colors">
+          <h2 className="text-lg font-medium mb-4">
             {editing ? 'Edit Category' : 'Add New Category'}
           </h2>
           {error && (
@@ -136,7 +136,7 @@ export default function CategoriesPage() {
           )}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+              <label htmlFor="name" className="bg-background text-foreground">
                 Category Name *
               </label>
               <input
@@ -171,8 +171,8 @@ export default function CategoriesPage() {
         headers={['Name', 'Actions']}
         data={categories}
         renderRow={(category) => (
-          <tr key={category.category_id} className="hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-            <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">
+          <tr key={category.category_id} className="hover:bg-muted transition-colors">
+            <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-foreground">
               {category.name}
             </td>
             <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
