@@ -1,0 +1,18 @@
+'use client';
+
+import Sidebar from '@/components/Sidebar';
+import Header from '@/components/Header';
+
+export default function DashboardLayout({ children }) {
+  return (
+    <div className="flex h-screen bg-slate-50">
+      <Sidebar />
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <Header title="Dashboard" />
+        <main className="flex-1 overflow-y-auto p-6">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}
