@@ -1,8 +1,3 @@
--- ============================================================
--- MULTI-TENANT STOCKMASTER DATABASE SCHEMA (v2.0)
--- ============================================================
-
-DROP DATABASE IF EXISTS stockmaster;
 CREATE DATABASE stockmaster;
 USE stockmaster;
 
