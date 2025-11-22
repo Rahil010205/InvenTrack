@@ -51,29 +51,29 @@ export default function NewReceiptForm({ products, warehouses }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8 bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+    <form onSubmit={handleSubmit} className="space-y-8 bg-card p-6 rounded-xl border border-border shadow-sm transition-colors">
       <div>
-        <label htmlFor="supplier_name" className="block text-sm font-medium text-slate-700">Supplier Name</label>
-        <input type="text" name="supplier_name" id="supplier_name" required className="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+        <label htmlFor="supplier_name" className="block text-sm font-medium text-foreground">Supplier Name</label>
+        <input type="text" name="supplier_name" id="supplier_name" required className="mt-1 block w-full rounded-md border border-input bg-background text-foreground px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors" />
       </div>
 
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-medium text-slate-900">Items</h3>
-          <button type="button" onClick={addItem} className="flex items-center text-sm text-blue-600 hover:text-blue-500">
+          <h3 className="text-lg font-medium text-foreground">Items</h3>
+          <button type="button" onClick={addItem} className="flex items-center text-sm text-primary hover:text-primary/80 transition-colors">
             <Plus className="mr-1 h-4 w-4" /> Add Item
           </button>
         </div>
 
         {items.map((item, index) => (
-          <div key={index} className="flex gap-4 items-end border-b border-slate-100 pb-4">
+          <div key={index} className="flex gap-4 items-end border-b border-border pb-4">
             <div className="flex-1">
-              <label className="block text-sm font-medium text-slate-700">Product</label>
+              <label className="block text-sm font-medium text-foreground">Product</label>
               <select
                 required
                 value={item.product_id}
                 onChange={(e) => updateItem(index, 'product_id', e.target.value)}
-                className="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-input bg-background text-foreground px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
               >
                 <option value="">Select Product</option>
                 {products.map((p) => (
@@ -83,12 +83,12 @@ export default function NewReceiptForm({ products, warehouses }) {
             </div>
 
             <div className="flex-1">
-              <label className="block text-sm font-medium text-slate-700">Warehouse</label>
+              <label className="block text-sm font-medium text-foreground">Warehouse</label>
               <select
                 required
                 value={item.warehouse_id}
                 onChange={(e) => updateItem(index, 'warehouse_id', e.target.value)}
-                className="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-input bg-background text-foreground px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
               >
                 <option value="">Select Warehouse</option>
                 {warehouses.map((w) => (
@@ -98,18 +98,18 @@ export default function NewReceiptForm({ products, warehouses }) {
             </div>
 
             <div className="w-24">
-              <label className="block text-sm font-medium text-slate-700">Qty</label>
+              <label className="block text-sm font-medium text-foreground">Qty</label>
               <input
                 type="number"
                 required
                 min="1"
                 value={item.quantity}
                 onChange={(e) => updateItem(index, 'quantity', parseInt(e.target.value))}
-                className="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-input bg-background text-foreground px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
               />
             </div>
 
-            <button type="button" onClick={() => removeItem(index)} className="mb-2 text-red-500 hover:text-red-700">
+            <button type="button" onClick={() => removeItem(index)} className="mb-2 text-destructive hover:text-destructive/80 transition-colors">
               <Trash2 className="h-5 w-5" />
             </button>
           </div>
@@ -117,10 +117,10 @@ export default function NewReceiptForm({ products, warehouses }) {
       </div>
 
       <div className="flex justify-end">
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           disabled={loading}
-          className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+          className="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 transition-colors"
         >
           {loading ? 'Creating...' : 'Create Receipt'}
         </button>

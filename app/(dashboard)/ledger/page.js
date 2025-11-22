@@ -6,26 +6,26 @@ export default async function LedgerPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-slate-900">Stock Ledger (Move History)</h1>
+      <h1 className="text-2xl font-bold text-foreground">Stock Ledger (Move History)</h1>
 
       <Table
         headers={['ID', 'Date', 'Product', 'Warehouse', 'Change', 'Source', 'Source ID']}
         data={ledger}
         renderRow={(entry) => (
-          <tr key={entry.ledger_id} className="hover:bg-slate-50">
-            <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-slate-900">#{entry.ledger_id}</td>
-            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-500">
+          <tr key={entry.ledger_id} className="hover:bg-accent transition-colors">
+            <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-foreground">#{entry.ledger_id}</td>
+            <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
               {new Date(entry.created_at).toLocaleString()}
             </td>
-            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-500">{entry.product_name} ({entry.product_sku})</td>
-            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-500">{entry.warehouse_name}</td>
+            <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{entry.product_name} ({entry.product_sku})</td>
+            <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{entry.warehouse_name}</td>
             <td className="whitespace-nowrap px-6 py-4 text-sm font-bold">
-              <span className={entry.quantity_change > 0 ? 'text-green-600' : 'text-red-600'}>
+              <span className={entry.quantity_change > 0 ? 'text-green-600 dark:text-green-400' : 'text-destructive'}>
                 {entry.quantity_change > 0 ? '+' : ''}{entry.quantity_change}
               </span>
             </td>
-            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-500 capitalize">{entry.source_type}</td>
-            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-500">#{entry.source_id}</td>
+            <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground capitalize">{entry.source_type}</td>
+            <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">#{entry.source_id}</td>
           </tr>
         )}
       />

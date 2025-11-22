@@ -7,7 +7,7 @@ export default async function NewAdjustmentPage() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold text-slate-900">New Stock Adjustment</h1>
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">New Stock Adjustment</h1>
       <NewAdjustmentForm products={products} warehouses={warehouses} />
     </div>
   );

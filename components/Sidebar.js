@@ -30,9 +30,9 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="flex h-full w-64 flex-col border-r border-slate-200 bg-white">
+    <div className="flex h-full w-64 flex-col border-r border-border bg-card transition-colors">
       <div className="flex h-16 shrink-0 items-center px-6">
-        <span className="text-xl font-bold text-slate-900">StockMaster</span>
+        <span className="text-xl font-bold text-foreground">StockMaster</span>
       </div>
       <nav className="flex-1 space-y-1 px-4 py-4">
         {navigation.map((item) => {
@@ -43,14 +43,14 @@ export default function Sidebar() {
               href={item.href}
               className={clsx(
                 isActive
-                  ? 'bg-slate-100 text-blue-600'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900',
-                'group flex items-center rounded-md px-2 py-2 text-sm font-medium'
+                  ? 'bg-accent text-primary'
+                  : 'text-muted-foreground hover:bg-accent hover:text-foreground',
+                'group flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors'
               )}
             >
               <item.icon
                 className={clsx(
-                  isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-500',
+                  isActive ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground',
                   'mr-3 h-5 w-5 shrink-0'
                 )}
                 aria-hidden="true"
@@ -60,12 +60,12 @@ export default function Sidebar() {
           );
         })}
       </nav>
-      <div className="border-t border-slate-200 p-4">
+      <div className="border-t border-border p-4">
         <button
           onClick={handleLogout}
-          className="group flex w-full items-center rounded-md px-2 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+          className="group flex w-full items-center rounded-md px-2 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors"
         >
-          <LogOut className="mr-3 h-5 w-5 shrink-0 text-red-500 group-hover:text-red-600" />
+          <LogOut className="mr-3 h-5 w-5 shrink-0 text-destructive group-hover:text-destructive" />
           Sign out
         </button>
       </div>
