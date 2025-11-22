@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -31,6 +32,7 @@ const navigation = [
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -58,22 +60,24 @@ export default function Sidebar() {
             <Link
               key={item.name}
               href={item.href}
+              title={isCollapsed ? item.name : undefined}
               className={clsx(
                 'group flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors',
                 isActive
-                  ? 'bg-accent text-accent-foreground'
-                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                  ? 'bg-slate-100 dark:bg-slate-700 text-blue-600 dark:text-blue-400'
+                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-100',
+                'group flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors',
+                isCollapsed ? 'justify-center' : ''
               )}
             >
               <item.icon
                 className={clsx(
-                  'mr-3 h-5 w-5 shrink-0 transition-colors',
-                  isActive
-                    ? 'text-accent-foreground'
-                    : 'text-muted-foreground group-hover:text-foreground'
+                  isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-500 dark:group-hover:text-slate-400',
+                  'h-5 w-5 shrink-0',
+                  isCollapsed ? '' : 'mr-3'
                 )}
               />
-              {item.name}
+              {!isCollapsed && <span className="truncate">{item.name}</span>}
             </Link>
           );
         })}
