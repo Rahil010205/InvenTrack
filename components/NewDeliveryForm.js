@@ -85,7 +85,7 @@ export default function NewDeliveryForm({ products, warehouses }) {
                   <option value="">Select Product</option>
                   {products.map((p) => (
                     <option key={p.product_id} value={p.product_id}>
-                      {p.name} ({p.sku}) - Free: {p.free_to_use}
+                      {p.name} ({p.sku})
                     </option>
                   ))}
                 </select>

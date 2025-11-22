@@ -1,6 +1,7 @@
 import { fetchAPI } from '@/lib/api';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
+import Table from '@/components/ui/Table';
 import ViewSwitcher from '@/components/ViewSwitcher';
 import ValidateButton from '@/components/ValidateButton';
 import SearchFilterBar from '@/components/SearchFilterBar';
@@ -30,7 +31,7 @@ export default async function DeliveriesPage({ searchParams }) {
       </div>
 
       <SearchFilterBar placeholder="Search customer..." statusOptions={['draft', 'done', 'cancelled']} />
-      <ViewSwitcher items={deliveries} type="delivery" />
+      {/*<ViewSwitcher items={deliveries} type="delivery" />*/}
       <Table
         headers={['ID', 'Customer', 'Status', 'Created By', 'Date', 'Actions']}
         data={deliveries}
@@ -46,8 +47,8 @@ export default async function DeliveriesPage({ searchParams }) {
   dark:bg-green-400 dark:text-green-900
   transition-colors
 ">
-  {delivery.status}
-</span>
+                {delivery.status}
+              </span>
 
             </td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{delivery.created_by_name || 'Unknown'}</td>
