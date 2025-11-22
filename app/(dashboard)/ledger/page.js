@@ -1,8 +1,8 @@
-import { Table } from '@/components/ui/Table';
-import { getStockLedger } from '@/app/actions/inventory';
+import { fetchAPI } from '@/lib/api';
+import Table from '@/components/ui/Table';
 
 export default async function LedgerPage() {
-  const ledger = await getStockLedger();
+  const ledger = await fetchAPI('/ledger');
 
   return (
     <div className="space-y-6">

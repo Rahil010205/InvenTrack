@@ -19,25 +19,46 @@ export async function POST(request) {
     }
 
     const hashedPassword = await hashPassword(password);
+    const companyName = `${name}'s Company`; // Default company name
 
-    const [result] = await pool.query(
-      'INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)',
-      [name, email, hashedPassword, 'manager']
-    );
-    const userId = result.insertId;
+    const connection = await pool.getConnection();
+    try {
+      await connection.beginTransaction();
 
-    const token = await signJWT({ sub: userId, email, name });
+      // Create Tenant
+      const [tenantResult] = await connection.query(
+        'INSERT INTO tenants (name) VALUES (?)',
+        [companyName]
+      );
+      const tenantId = tenantResult.insertId;
 
-    const cookieStore = await cookies();
-    cookieStore.set('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 24, // 24 hours
-      path: '/',
-    });
+      // Create User
+      const [userResult] = await connection.query(
+        'INSERT INTO users (tenant_id, name, email, password_hash, role) VALUES (?, ?, ?, ?, ?)',
+        [tenantId, name, email, hashedPassword, 'manager']
+      );
+      const userId = userResult.insertId;
 
-    return NextResponse.json({ message: 'User created successfully', user: { id: userId, name, email } }, { status: 201 });
+      await connection.commit();
+
+      const token = await signJWT({ sub: userId, email, name, tenant_id: tenantId });
+
+      const cookieStore = await cookies();
+      cookieStore.set('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 60 * 60 * 24, // 24 hours
+        path: '/',
+      });
+
+      return NextResponse.json({ message: 'User created successfully', user: { id: userId, name, email, tenant_id: tenantId } }, { status: 201 });
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
   } catch (error) {
     console.error('Signup error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

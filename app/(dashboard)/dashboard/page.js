@@ -1,9 +1,9 @@
+import { fetchAPI } from '@/lib/api';
 import { Card } from '@/components/ui/Card';
 import { Package, AlertTriangle, ArrowDownToLine, ArrowUpFromLine } from 'lucide-react';
-import { getDashboardStats } from '@/app/actions/dashboard';
 
 export default async function DashboardPage() {
-  const stats = await getDashboardStats();
+  const stats = await fetchAPI('/dashboard');
 
   return (
     <div className="space-y-6">

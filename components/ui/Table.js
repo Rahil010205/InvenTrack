@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-export function Table({ headers, data, renderRow, className }) {
+export default function Table({ headers, data, renderRow, className }) {
   return (
     <div className={clsx("overflow-hidden rounded-lg border border-slate-200 shadow-sm", className)}>
       <table className="min-w-full divide-y divide-slate-200 bg-white">

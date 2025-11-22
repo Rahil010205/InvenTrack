@@ -1,9 +1,13 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
+import { getTenantId } from '@/lib/tenant';
 
-export async function GET() {
+export async function GET(request) {
   try {
-    const [rows] = await pool.query('SELECT * FROM warehouses ORDER BY name');
+    const tenantId = await getTenantId(request);
+    if (!tenantId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const [rows] = await pool.query('SELECT * FROM warehouses WHERE tenant_id = ? ORDER BY name', [tenantId]);
     return NextResponse.json(rows);
   } catch (error) {
     console.error('Failed to fetch warehouses:', error);

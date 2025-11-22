@@ -1,10 +1,10 @@
+import { fetchAPI } from '@/lib/api';
 import Link from 'next/link';
-import { Table } from '@/components/ui/Table';
-import { getDeliveries } from '@/app/actions/inventory';
 import { Plus } from 'lucide-react';
+import Table from '@/components/ui/Table';
 
 export default async function DeliveriesPage() {
-  const deliveries = await getDeliveries();
+  const deliveries = await fetchAPI('/inventory/deliveries');
 
   return (
     <div className="space-y-6">

@@ -1,10 +1,10 @@
+import { fetchAPI } from '@/lib/api';
 import Link from 'next/link';
-import { Table } from '@/components/ui/Table';
-import { getProducts } from '@/app/actions/product';
 import { Plus } from 'lucide-react';
+import Table from '@/components/ui/Table';
 
 export default async function ProductsPage() {
-  const products = await getProducts();
+  const products = await fetchAPI('/products');
 
   return (
     <div className="space-y-6">

@@ -1,10 +1,9 @@
-import { getProducts } from '@/app/actions/product';
-import { getWarehouses } from '@/app/actions/inventory';
+import { fetchAPI } from '@/lib/api';
 import NewDeliveryForm from '@/components/NewDeliveryForm';
 
 export default async function NewDeliveryPage() {
-  const products = await getProducts();
-  const warehouses = await getWarehouses();
+  const products = await fetchAPI('/products');
+  const warehouses = await fetchAPI('/inventory/warehouses');
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">

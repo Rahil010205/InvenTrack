@@ -1,8 +1,8 @@
-import { getCategories } from '@/app/actions/product';
+import { fetchAPI } from '@/lib/api';
 import NewProductForm from '@/components/NewProductForm';
 
 export default async function NewProductPage() {
-  const categories = await getCategories();
+  const categories = await fetchAPI('/categories');
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">

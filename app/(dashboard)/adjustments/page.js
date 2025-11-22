@@ -1,10 +1,10 @@
+import { fetchAPI } from '@/lib/api';
 import Link from 'next/link';
-import { Table } from '@/components/ui/Table';
-import { getAdjustments } from '@/app/actions/inventory';
 import { Plus } from 'lucide-react';
+import Table from '@/components/ui/Table';
 
 export default async function AdjustmentsPage() {
-  const adjustments = await getAdjustments();
+  const adjustments = await fetchAPI('/inventory/adjustments');
 
   return (
     <div className="space-y-6">

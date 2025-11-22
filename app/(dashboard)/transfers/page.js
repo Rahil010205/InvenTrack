@@ -1,10 +1,10 @@
+import { fetchAPI } from '@/lib/api';
 import Link from 'next/link';
-import { Table } from '@/components/ui/Table';
-import { getTransfers } from '@/app/actions/inventory';
 import { Plus } from 'lucide-react';
+import Table from '@/components/ui/Table';
 
 export default async function TransfersPage() {
-  const transfers = await getTransfers();
+  const transfers = await fetchAPI('/inventory/transfers');
 
   return (
     <div className="space-y-6">
