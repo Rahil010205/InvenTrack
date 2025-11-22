@@ -11,13 +11,31 @@ export async function GET(request) {
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     const { tenant_id } = payload;
 
-    const [rows] = await pool.query(`
+    const { searchParams } = new URL(request.url);
+    const search = searchParams.get('search');
+    const status = searchParams.get('status');
+
+    let query = `
       SELECT r.*, u.name as created_by_name 
       FROM receipts r 
       LEFT JOIN users u ON r.created_by = u.user_id 
       WHERE r.tenant_id = ?
-      ORDER BY r.created_at DESC
-    `, [tenant_id]);
+    `;
+    const params = [tenant_id];
+
+    if (search) {
+      query += ` AND r.supplier_name LIKE ?`;
+      params.push(`%${search}%`);
+    }
+
+    if (status) {
+      query += ` AND r.status = ?`;
+      params.push(status);
+    }
+
+    query += ` ORDER BY r.created_at DESC`;
+
+    const [rows] = await pool.query(query, params);
     return NextResponse.json(rows);
   } catch (error) {
     console.error('Failed to fetch receipts:', error);
@@ -42,7 +60,7 @@ export async function POST(request) {
 
       const [result] = await connection.query(
         'INSERT INTO receipts (tenant_id, supplier_name, created_by, status) VALUES (?, ?, ?, ?)',
-        [tenant_id, supplier_name, user_id, 'done']
+        [tenant_id, supplier_name, user_id, 'draft']
       );
       const receiptId = result.insertId;
 
@@ -50,19 +68,6 @@ export async function POST(request) {
         await connection.query(
           'INSERT INTO receipt_items (tenant_id, receipt_id, product_id, warehouse_id, quantity) VALUES (?, ?, ?, ?, ?)',
           [tenant_id, receiptId, item.product_id, item.warehouse_id, item.quantity]
-        );
-
-        await connection.query(
-          `INSERT INTO stock (tenant_id, product_id, warehouse_id, quantity) 
-           VALUES (?, ?, ?, ?) 
-           ON DUPLICATE KEY UPDATE quantity = quantity + ?`,
-          [tenant_id, item.product_id, item.warehouse_id, item.quantity, item.quantity]
-        );
-
-        await connection.query(
-          `INSERT INTO stock_ledger (tenant_id, product_id, warehouse_id, quantity_change, source_type, source_id) 
-           VALUES (?, ?, ?, ?, ?, ?)`,
-          [tenant_id, item.product_id, item.warehouse_id, item.quantity, 'receipt', receiptId]
         );
       }
 

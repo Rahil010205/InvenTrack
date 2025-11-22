@@ -2,9 +2,19 @@ import { fetchAPI } from '@/lib/api';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import Table from '@/components/ui/Table';
+import ValidateButton from '@/components/ValidateButton';
+import SearchFilterBar from '@/components/SearchFilterBar';
 
-export default async function DeliveriesPage() {
-  const deliveries = await fetchAPI('/inventory/deliveries');
+export default async function DeliveriesPage({ searchParams }) {
+  const params = await searchParams;
+  const search = params?.search || '';
+  const status = params?.status || '';
+  const query = new URLSearchParams();
+  if (search) query.set('search', search);
+  if (status) query.set('status', status);
+  const queryString = query.toString() ? `?${query.toString()}` : '';
+
+  const deliveries = await fetchAPI(`/inventory/deliveries${queryString}`);
 
   return (
     <div className="space-y-6">
@@ -19,8 +29,10 @@ export default async function DeliveriesPage() {
         </Link>
       </div>
 
+      <SearchFilterBar placeholder="Search customer..." statusOptions={['draft', 'done', 'cancelled']} />
+
       <Table
-        headers={['ID', 'Customer', 'Status', 'Created By', 'Date']}
+        headers={['ID', 'Customer', 'Status', 'Created By', 'Date', 'Actions']}
         data={deliveries}
         renderRow={(delivery) => (
           <tr key={delivery.delivery_id} className="hover:bg-accent transition-colors">
@@ -34,6 +46,11 @@ export default async function DeliveriesPage() {
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">{delivery.created_by_name || 'Unknown'}</td>
             <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
               {new Date(delivery.created_at).toLocaleDateString()}
+            </td>
+            <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
+              {delivery.status === 'draft' && (
+                <ValidateButton id={delivery.delivery_id} type="deliveries" />
+              )}
             </td>
           </tr>
         )}

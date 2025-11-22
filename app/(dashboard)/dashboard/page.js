@@ -1,13 +1,24 @@
 import { fetchAPI } from '@/lib/api';
 import { Card } from '@/components/ui/Card';
 import { Package, AlertTriangle, ArrowDownToLine, ArrowUpFromLine } from 'lucide-react';
+import DashboardFilter from '@/components/DashboardFilter';
 
-export default async function DashboardPage() {
-  const stats = await fetchAPI('/dashboard');
+export default async function DashboardPage({ searchParams }) {
+  const params = await searchParams;
+  const warehouse_id = params?.warehouse_id || '';
+  const query = warehouse_id ? `?warehouse_id=${warehouse_id}` : '';
+
+  const [stats, warehouses] = await Promise.all([
+    fetchAPI(`/dashboard${query}`),
+    fetchAPI('/warehouses')
+  ]);
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-foreground">Overview</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <h1 className="text-2xl font-bold text-foreground">Overview</h1>
+        <DashboardFilter warehouses={warehouses} />
+      </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <Card

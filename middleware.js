@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { verifyJWT } from '@/lib/auth';
 
-export async function proxy(request) {
+export async function middleware(request) {
   const { pathname } = request.nextUrl;
   const protectedRoutes = ['/dashboard', '/products', '/receipts', '/deliveries', '/transfers', '/adjustments', '/ledger'];
   const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
