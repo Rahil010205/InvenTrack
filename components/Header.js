@@ -6,11 +6,10 @@ import { Sun, Moon } from 'lucide-react';
 export default function Header({ title }) {
   const { theme, toggleTheme, mounted } = useTheme();
 
-  // Prevent hydration mismatch by showing default icon until mounted
   if (!mounted) {
     return (
       <header className="flex h-16 items-center justify-between border-b border-border bg-card px-6 shadow-sm transition-colors">
-        <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+        <h2 className="text-lg font-semibold text-foreground">InvenTrack</h2>
         <div className="flex items-center gap-4">
           <button
             className="p-2 rounded-lg hover:bg-accent transition-colors"
@@ -30,7 +29,9 @@ export default function Header({ title }) {
 
   return (
     <header className="flex h-16 items-center justify-between border-b border-border bg-card px-6 shadow-sm transition-colors">
-      <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+      <h2 className="text-2xl font-extrabold text-foreground bg-clip-text">
+        InvenTrack
+      </h2>
       <div className="flex items-center gap-4">
         <button
           onClick={toggleTheme}

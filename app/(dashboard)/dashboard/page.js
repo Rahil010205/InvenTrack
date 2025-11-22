@@ -25,22 +25,25 @@ export default async function DashboardPage({ searchParams }) {
           title="Total Stock Items"
           value={stats.totalQty}
           icon={Package}
+          className="bg-green-600 text-white"
         />
         <Card
           title="Low Stock Alerts"
           value={stats.lowStock}
           icon={AlertTriangle}
-          className={stats.lowStock > 0 ? "border-l-4 border-l-red-500" : ""}
+          className="bg-red-500 text-white"
         />
         <Card
           title="Pending Receipts"
           value={stats.pendingReceipts}
           icon={ArrowDownToLine}
+          className="bg-yellow-500 text-white"
         />
         <Card
           title="Pending Deliveries"
           value={stats.pendingDeliveries}
           icon={ArrowUpFromLine}
+          className="bg-blue-600 text-white"
         />
       </div>
 
